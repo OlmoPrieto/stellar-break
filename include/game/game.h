@@ -9,31 +9,35 @@
 
 struct SNetStream;
 
-class IGame
+class CGame
 {
 public:
-  static constexpr uint32 sm_uWindowWidth  = 1260u;
-  static constexpr uint32 sm_uWindowHeight = 580u;
-
-  static inline CVector2D sm_v2RightPlayerPos = { sm_uWindowWidth - 8.0f * 4.0f , sm_uWindowHeight - 32.0f * 4.0f };
-  static inline CVector2D sm_v2LeftPlayerPos  = { 8.0f * 4.0f                   , 32.0f * 4.0f };
+  static constexpr uint32 sm_uWindowWidth  = 432u;
+  static constexpr uint32 sm_uWindowHeight = 960u;
   
   static inline CVector2D sm_v2PaddleSize = { 16.0f, 64.0f };
   static inline CVector2D sm_v2BallSize = { 32.0f, 32.0f };
-};
 
-struct SGameState
-{
-  bool Write(SNetStream* _pStream);
-  bool Read(SNetStream* _pStream);
+  static CGame& GetInstance()
+  {
+    static CGame oInstance;
+    return oInstance;
+  }
 
-  SGameState& operator=(const SGameState& _oOther);
-  bool IsValid() const { return m_uFrame != UINT64_MAX; }
+  CGame(const CGame&) = delete;
+  void operator=(const CGame&) = delete;
 
-  std::vector<CVector2D> m_vctBallsPos;
-  std::vector<CVector2D> m_vctBallsVel;
-  CVector2D m_av2PlayersPos[2] = { CVector2D(), CVector2D() };
-  uint64 m_uFrame = UINT64_MAX;
-  std::chrono::time_point<std::chrono::high_resolution_clock> m_oTimeReceived;
-  uint8 m_uNumBalls = 0u;
+  void Init();
+  void Update(float _fDt);
+  void Draw();
+  const std::vector<CBall>& GetBalls() const { return m_vctBalls; }
+  bool WantClose() const { return m_bWantClose; }
+
+private:
+  CGame();
+  ~CGame();
+
+  std::vector<CBall> m_vctBalls;
+  CPaddle m_oPaddle;
+  bool m_bWantClose = false;
 };
