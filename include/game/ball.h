@@ -5,6 +5,7 @@
 #include "raylib/raylib.h"
 #include "base/types.h"
 #include "base/maths.h"
+#include "game/block.h"
 
 class CBall
 {
@@ -15,8 +16,8 @@ public:
   void Init();
   void Update(float _fDt);
   void Draw();
-
   void UnloadResources();
+  int32 CheckCollisions(const std::vector<CBlock>& _vctBlocks);
 
   CVector2D m_v2Pos;
   CVector2D m_v2PrevPos;

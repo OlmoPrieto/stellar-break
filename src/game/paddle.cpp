@@ -38,7 +38,7 @@ void CPaddle::Init()
 
 void CPaddle::Update(float _fDt)
 {
-  m_v2Pos.x = GetMouseX();
+  m_v2Pos.x = GetMouseX() / CGame::sm_uRenderFactor;
 }
 
 // ------------------------

@@ -27,6 +27,32 @@ void CBall::UnloadResources()
 
 // ------------------------
 
+int32 CBall::CheckCollisions(const std::vector<CBlock>& _vctBlocks)
+{
+  int32 iIndex = -1;
+  for (uint32 i = 0; i < _vctBlocks.size(); ++i)
+  {
+    const CVector2D v2BlockPos = _vctBlocks[i].m_v2Pos;
+    const CVector2D v2BlockHalfSize = _vctBlocks[i].m_v2HalfSize;
+    if (m_v2Pos.x + m_fRadius > v2BlockPos.x - v2BlockHalfSize.x &&
+        m_v2Pos.x - m_fRadius < v2BlockPos.x + v2BlockHalfSize.x &&
+        m_v2Pos.y + m_fRadius > v2BlockPos.y - v2BlockHalfSize.y &&
+        m_v2Pos.y - m_fRadius < v2BlockPos.y + v2BlockHalfSize.y
+      )
+    {
+      iIndex = i;
+
+      m_v2Velocity.y *= -1.0f;
+
+      break;
+    }
+  }
+
+  return iIndex;
+}
+
+// ------------------------
+
 void CBall::Init()
 {
   assert(!m_spTexture);
